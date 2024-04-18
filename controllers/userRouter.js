@@ -3,6 +3,9 @@ const userModel = require("../models/userModel")
 const validateModel=require("../models/validateModel")
 const mailerModel=require("../models/mailerModel")
 const bcrypt = require("bcryptjs")
+const axios = require('axios')
+const FormData = require('form-data')
+
 
 const router = express.Router()
 
@@ -20,9 +23,9 @@ router.post('/signup', async (req, res) => {
         if (!isValid) {
             return res.status(400).json({ message });
         }
-        if (!validateModel.validatePassword(password)) {
-            return res.status(400).send('Password should be 8 character long with atleast one uppercase,lowercase,special character and a digit');
-        }
+        // if (!validateModel.validatePassword(password)) {
+        //     return res.status(400).send('Password should be 8 character long with atleast one uppercase,lowercase,special character and a digit');
+        // }
         const hashedPassword = await hashPasswordgenerator(password);
         data.user_password = hashedPassword;
 
@@ -83,5 +86,33 @@ router.post('/login', (req, res) => {
         })
     });
 });
+
+
+router.post("/check",async (req,res)=>{
+
+    
+    const data = new FormData();
+    data.append('clothing_image',);
+    data.append('avatar_image', fs.createReadStream('controllers/assets/shirt guy.jpg'));
+
+    const options = {
+        method: 'POST',
+        url: 'https://texel-virtual-try-on.p.rapidapi.com/try-on-file',
+        headers: {
+          'X-RapidAPI-Key': '32fbd79bb5msh2259071a25ab83fp156319jsn012882197e4d',
+          'X-RapidAPI-Host': 'texel-virtual-try-on.p.rapidapi.com',
+          ...data.getHeaders(),
+        },
+        data: data
+      };
+
+    try {
+        const response = await axios.request(options);
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 
 module.exports = router
