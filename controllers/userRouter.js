@@ -20,9 +20,9 @@ router.post('/signup', async (req, res) => {
         if (!isValid) {
             return res.status(400).json({ message });
         }
-        if (!validateModel.validatePassword(password)) {
-            return res.status(400).send('Password should be 8 character long with atleast one uppercase,lowercase,special character and a digit');
-        }
+        // if (!validateModel.validatePassword(password)) {
+        //     return res.status(400).send('Password should be 8 character long with atleast one uppercase,lowercase,special character and a digit');
+        // }
         const hashedPassword = await hashPasswordgenerator(password);
         data.user_password = hashedPassword;
 
